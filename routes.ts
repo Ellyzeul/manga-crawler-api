@@ -30,7 +30,7 @@ function handler(functionName: string, docs: Record<string, { params: Array<stri
   urlParams.forEach(param => docParams.push(param))
   docs[routeName(functionName)] = { params: docParams }
 
-  return async({ query }) => {
+  return async({ query }, reply) => {
     const args: string[] = []
     const errors: string[] = []
     
@@ -44,11 +44,16 @@ function handler(functionName: string, docs: Record<string, { params: Array<stri
       args[paramsList.indexOf(urlParamToParamMap[requestParam])] = (query as Record<string, string>)[requestParam]
     })
 
-    if(errors.length > 0) return {
-      success: false,
-      reason: errors.length === 1
-        ? `Argument ${errors} is not valid for the requested parameters: ${urlParams.join(', ')}`
-        : `Arguments ${errors.join(', ')} are not valid for the requested parameters: ${urlParams.join(', ')}`
+    if(errors.length > 0) {
+      reply.code(400)
+      reply.send({
+        success: false,
+        reason: errors.length === 1
+          ? `Argument ${errors} is not valid for the requested parameters: ${urlParams.join(', ')}`
+          : `Arguments ${errors.join(', ')} are not valid for the requested parameters: ${urlParams.join(', ')}`
+      })
+  
+      return
     }
   
     try {
@@ -58,10 +63,11 @@ function handler(functionName: string, docs: Record<string, { params: Array<stri
       }
     }
     catch(reason) {
-      return {
+      reply.code(500)
+      reply.send({
         success: false,
         reason,
-      }
+      })
     }
   }
 }
