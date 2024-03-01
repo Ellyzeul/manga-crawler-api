@@ -1,0 +1,25 @@
+{
+  "name": "manga-crawler-api",
+  "version": "1.0.0",
+  "description": "Uma API REST para a biblioteca manga-crawler",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "nodemon index.ts",
+    "start": "npm run build && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.11.24",
+    "fastify": "^4.26.1",
+    "manga-crawler": "^0.3.1",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2"
+  }
+}
