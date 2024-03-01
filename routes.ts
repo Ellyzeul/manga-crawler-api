@@ -6,7 +6,7 @@ export default function routes(fastify: FastifyInstance, _: never, done: (err?: 
   const docs: Record<string, { params: Array<string> }> = {}
 
   functionNames.forEach(functionName => {
-    fastify.get(`/api/${routeName(functionName)}`, handler(functionName, docs))
+    fastify.get(routeName(functionName), handler(functionName, docs))
   })
 
   fastify.get('/api', () => ({ routes: docs }))
@@ -15,7 +15,7 @@ export default function routes(fastify: FastifyInstance, _: never, done: (err?: 
 }
 
 function routeName(functionName: string) {
-  return functionName.replaceAll(/[A-Z]/g, char => `-${char.toLowerCase()}`)
+  return `/api/${functionName.replaceAll(/[A-Z]/g, char => `-${char.toLowerCase()}`)}`
 }
 
 function handler(functionName: string, docs: Record<string, { params: Array<string> }>): RouteHandlerMethod {

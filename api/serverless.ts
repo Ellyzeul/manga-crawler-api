@@ -1,9 +1,8 @@
 import fastify from "fastify";
-import routes from "./routes";
 
 const server = fastify({ logger: true })
 
-server.register(routes)
+server.register(import('../routes'))
 
 server.listen({ port: 3000 }, (err, addr) => {
   if(err) {
